@@ -7,10 +7,11 @@ CRM básico para acompanhar envios e respostas de contatos comerciais. Campos: E
 ## 1. Criar o projeto Firebase
 
 1. Acesse https://console.firebase.google.com e clique em **Adicionar projeto**. Dê o nome que quiser (ex: `crm-vial`) e conclua a criação (pode desativar o Google Analytics, não é necessário).
-2. No menu lateral, vá em **Compilação > Authentication** → aba **Sign-in method** → ative o provedor **E-mail/senha**.
-3. Ainda em Authentication, vá na aba **Users** → **Add user** → cadastre o e-mail e a senha que você vai usar para entrar no CRM (essa é a "senha simples" que protege o acesso).
+2. No menu lateral, vá em **Compilação > Authentication** → aba **Sign-in method** → ative o provedor **Google** (defina o "e-mail de suporte do projeto" quando pedido).
+3. O acesso é restrito a um único e-mail Google (`viallamv@gmail.com`), verificado tanto no `app.js` quanto nas regras do Firestore — não é preciso cadastrar usuário manualmente.
 4. No menu lateral, vá em **Compilação > Firestore Database** → **Criar banco de dados** → escolha o modo de produção e a região mais próxima (ex: `southamerica-east1`).
 5. Na aba **Regras** do Firestore, cole o conteúdo do arquivo [`firestore.rules`](./firestore.rules) deste projeto e publique.
+6. Em **Authentication > Settings > Authorized domains**, adicione o domínio onde o site vai ficar publicado (ex: `lamvial1958.github.io`) — sem isso o login com Google é bloqueado nesse domínio.
 
 ## 2. Pegar as credenciais do app
 
@@ -28,7 +29,7 @@ Como o app usa `type="module"`, você precisa servir os arquivos por HTTP (abrir
 npx serve .
 ```
 
-Depois abra a URL indicada no navegador e entre com o e-mail/senha criados no passo 1.3.
+Depois abra a URL indicada no navegador e clique em "Entrar com Google" (em `localhost` o Firebase já libera por padrão).
 
 ## 4. Publicar no GitHub Pages
 

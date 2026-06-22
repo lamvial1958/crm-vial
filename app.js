@@ -1,7 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 import {
   getAuth,
-  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
   signOut,
   onAuthStateChanged,
 } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
@@ -23,13 +24,13 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const CONTACTS_COLLECTION = "contacts";
+const AUTHORIZED_EMAIL = "viallamv@gmail.com";
+const googleProvider = new GoogleAuthProvider();
 
 // ---------- Elementos ----------
 const loginScreen = document.getElementById("login-screen");
 const appScreen = document.getElementById("app-screen");
-const loginForm = document.getElementById("login-form");
-const loginEmailInput = document.getElementById("login-email");
-const loginPasswordInput = document.getElementById("login-password");
+const googleLoginBtn = document.getElementById("google-login-btn");
 const loginError = document.getElementById("login-error");
 const userEmailLabel = document.getElementById("user-email");
 const logoutBtn = document.getElementById("logout-btn");
@@ -60,23 +61,24 @@ let allContacts = [];
 let unsubscribeContacts = null;
 
 // ---------- Autenticação ----------
-loginForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+googleLoginBtn.addEventListener("click", async () => {
   loginError.textContent = "";
   try {
-    await signInWithEmailAndPassword(
-      auth,
-      loginEmailInput.value.trim(),
-      loginPasswordInput.value
-    );
+    await signInWithPopup(auth, googleProvider);
   } catch (err) {
-    loginError.textContent = "E-mail ou senha inválidos.";
+    loginError.textContent = "Não foi possível entrar com o Google. Tente novamente.";
   }
 });
 
 logoutBtn.addEventListener("click", () => signOut(auth));
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
+  if (user && user.email !== AUTHORIZED_EMAIL) {
+    loginError.textContent = "Esta conta Google não tem acesso a este CRM.";
+    await signOut(auth);
+    return;
+  }
+
   if (user) {
     loginScreen.classList.add("hidden");
     appScreen.classList.remove("hidden");
@@ -85,7 +87,6 @@ onAuthStateChanged(auth, (user) => {
   } else {
     appScreen.classList.add("hidden");
     loginScreen.classList.remove("hidden");
-    loginForm.reset();
     if (unsubscribeContacts) {
       unsubscribeContacts();
       unsubscribeContacts = null;
