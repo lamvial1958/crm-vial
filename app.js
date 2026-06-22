@@ -66,7 +66,8 @@ googleLoginBtn.addEventListener("click", async () => {
   try {
     await signInWithPopup(auth, googleProvider);
   } catch (err) {
-    loginError.textContent = "Não foi possível entrar com o Google. Tente novamente.";
+    loginError.textContent = `Erro: ${err.code || err.message}`;
+    console.error("Erro no login Google:", err);
   }
 });
 
