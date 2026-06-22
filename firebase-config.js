@@ -4,10 +4,10 @@
 // realmente protege os dados são as regras do Firestore (ver firestore.rules),
 // que exigem login para ler/escrever.
 export const firebaseConfig = {
-  apiKey: "COLE_AQUI_SUA_API_KEY",
-  authDomain: "SEU_PROJETO.firebaseapp.com",
-  projectId: "SEU_PROJETO",
-  storageBucket: "SEU_PROJETO.appspot.com",
-  messagingSenderId: "SEU_SENDER_ID",
-  appId: "SEU_APP_ID",
+  apiKey: "AIzaSyATAecEwgY7rq1WyfL_sN9jOlcLwn6TD9c",
+  authDomain: "crm-vial.firebaseapp.com",
+  projectId: "crm-vial",
+  storageBucket: "crm-vial.firebasestorage.app",
+  messagingSenderId: "302621171008",
+  appId: "1:302621171008:web:717d099d8286d88ca8aea5",
 };
