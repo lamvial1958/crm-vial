@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CRM Vial</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Tela de login -->
+  <section id="login-screen" class="screen">
+    <form id="login-form" class="login-card">
+      <h1>CRM Vial</h1>
+      <p class="subtitle">Entre para acessar seus contatos</p>
+      <input type="email" id="login-email" placeholder="E-mail" autocomplete="username" required />
+      <input type="password" id="login-password" placeholder="Senha" autocomplete="current-password" required />
+      <button type="submit">Entrar</button>
+      <p id="login-error" class="error-msg"></p>
+    </form>
+  </section>
+
+  <!-- App principal -->
+  <section id="app-screen" class="screen hidden">
+    <header class="topbar">
+      <h1>CRM Vial</h1>
+      <div class="topbar-actions">
+        <span id="user-email"></span>
+        <button id="logout-btn" class="btn-secondary">Sair</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="toolbar">
+        <input type="text" id="search-input" placeholder="Buscar por empresa, contato, setor..." />
+        <select id="status-filter">
+          <option value="">Todos os status</option>
+          <option value="Sem resposta">Sem resposta</option>
+          <option value="Interessado">Interessado</option>
+          <option value="Recusado">Recusado</option>
+        </select>
+        <button id="new-contact-btn" class="btn-primary">+ Novo contato</button>
+      </div>
+
+      <div class="table-wrapper">
+        <table id="contacts-table">
+          <thead>
+            <tr>
+              <th>Empresa</th>
+              <th>Setor</th>
+              <th>Nome do Contato</th>
+              <th>Cargo</th>
+              <th>E-mail</th>
+              <th>Data do Envio</th>
+              <th>Status</th>
+              <th>Próximo Passo</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="contacts-tbody">
+          </tbody>
+        </table>
+        <p id="empty-msg" class="empty-msg hidden">Nenhum contato cadastrado ainda.</p>
+      </div>
+    </main>
+  </section>
+
+  <!-- Modal de novo/editar contato -->
+  <div id="contact-modal" class="modal-overlay hidden">
+    <form id="contact-form" class="modal-card">
+      <h2 id="modal-title">Novo contato</h2>
+      <input type="hidden" id="contact-id" />
+
+      <label>Empresa
+        <input type="text" id="field-empresa" required />
+      </label>
+      <label>Setor
+        <input type="text" id="field-setor" />
+      </label>
+      <label>Nome do Contato
+        <input type="text" id="field-nome" required />
+      </label>
+      <label>Cargo
+        <input type="text" id="field-cargo" />
+      </label>
+      <label>E-mail
+        <input type="email" id="field-email" />
+      </label>
+      <label>Data do Envio
+        <input type="date" id="field-data" />
+      </label>
+      <label>Status
+        <select id="field-status">
+          <option value="Sem resposta">Sem resposta</option>
+          <option value="Interessado">Interessado</option>
+          <option value="Recusado">Recusado</option>
+        </select>
+      </label>
+      <label>Próximo Passo
+        <textarea id="field-proximo-passo" rows="2"></textarea>
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" id="delete-contact-btn" class="btn-danger hidden">Excluir</button>
+        <div class="modal-actions-right">
+          <button type="button" id="cancel-modal-btn" class="btn-secondary">Cancelar</button>
+          <button type="submit" class="btn-primary">Salvar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <script type="module" src="firebase-config.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
