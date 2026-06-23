@@ -52,6 +52,7 @@
               <th>Data do Envio</th>
               <th>Status</th>
               <th>Próximo Passo</th>
+              <th>Acompanhamento</th>
               <th></th>
             </tr>
           </thead>
@@ -97,6 +98,9 @@
       <label>Próximo Passo
         <textarea id="field-proximo-passo" rows="2"></textarea>
       </label>
+      <label>Acompanhamento
+        <input type="date" id="field-acompanhamento" />
+      </label>
 
       <div class="modal-actions">
         <button type="button" id="delete-contact-btn" class="btn-danger hidden">Excluir</button>
@@ -106,6 +110,20 @@
         </div>
       </div>
     </form>
+  </div>
+
+  <!-- Modal de aviso de acompanhamentos vencidos -->
+  <div id="followup-alert-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <h2>Acompanhamentos pendentes</h2>
+      <p class="followup-alert-desc">Estes contatos têm uma data de acompanhamento que já passou:</p>
+      <ul id="followup-alert-list" class="followup-alert-list"></ul>
+      <div class="modal-actions">
+        <div class="modal-actions-right">
+          <button type="button" id="followup-alert-close-btn" class="btn-secondary">Fechar</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script type="module" src="firebase-config.js"></script>

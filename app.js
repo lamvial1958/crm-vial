@@ -56,9 +56,15 @@ const fieldEmail = document.getElementById("field-email");
 const fieldData = document.getElementById("field-data");
 const fieldStatus = document.getElementById("field-status");
 const fieldProximoPasso = document.getElementById("field-proximo-passo");
+const fieldAcompanhamento = document.getElementById("field-acompanhamento");
+
+const followupAlertModal = document.getElementById("followup-alert-modal");
+const followupAlertList = document.getElementById("followup-alert-list");
+const followupAlertCloseBtn = document.getElementById("followup-alert-close-btn");
 
 let allContacts = [];
 let unsubscribeContacts = null;
+let followupCheckedThisSession = false;
 
 // ---------- Autenticação ----------
 googleLoginBtn.addEventListener("click", async () => {
@@ -93,6 +99,7 @@ onAuthStateChanged(auth, async (user) => {
       unsubscribeContacts = null;
     }
     allContacts = [];
+    followupCheckedThisSession = false;
     renderTable();
   }
 });
@@ -103,6 +110,10 @@ function listenToContacts() {
   unsubscribeContacts = onSnapshot(q, (snapshot) => {
     allContacts = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
     renderTable();
+    if (!followupCheckedThisSession) {
+      followupCheckedThisSession = true;
+      checkOverdueFollowups();
+    }
   });
 }
 
@@ -140,6 +151,7 @@ function renderTable() {
       <td>${escapeHtml(formatDate(c.data))}</td>
       <td><span class="status-badge ${statusClass(c.status)}">${escapeHtml(c.status || "Sem resposta")}</span></td>
       <td>${escapeHtml(c.proximoPasso)}</td>
+      <td>${escapeHtml(formatDate(c.acompanhamento))}</td>
       <td></td>
     `;
     tr.addEventListener("click", () => openModal(c));
@@ -179,6 +191,7 @@ function openModal(contact) {
     fieldData.value = contact.data || "";
     fieldStatus.value = contact.status || "Sem resposta";
     fieldProximoPasso.value = contact.proximoPasso || "";
+    fieldAcompanhamento.value = contact.acompanhamento || "";
     deleteContactBtn.classList.remove("hidden");
   } else {
     modalTitle.textContent = "Novo contato";
@@ -214,6 +227,7 @@ contactForm.addEventListener("submit", async (e) => {
     data: fieldData.value,
     status: fieldStatus.value,
     proximoPasso: fieldProximoPasso.value.trim(),
+    acompanhamento: fieldAcompanhamento.value,
   };
 
   const id = fieldId.value;
@@ -231,4 +245,62 @@ deleteContactBtn.addEventListener("click", async () => {
   if (!confirm("Excluir este contato?")) return;
   await deleteDoc(doc(db, CONTACTS_COLLECTION, id));
   closeModal();
+});
+
+// ---------- Aviso de acompanhamentos vencidos ----------
+function checkOverdueFollowups() {
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const overdue = allContacts.filter(
+    (c) =>
+      c.acompanhamento &&
+      c.acompanhamento <= todayStr &&
+      c.acompanhamentoDismissedDate !== c.acompanhamento
+  );
+  if (overdue.length === 0) return;
+  renderFollowupAlert(overdue);
+}
+
+function renderFollowupAlert(overdueContacts) {
+  followupAlertList.innerHTML = "";
+  for (const c of overdueContacts) {
+    const li = document.createElement("li");
+    li.className = "followup-alert-item";
+    li.innerHTML = `
+      <div class="followup-alert-info">
+        <strong>${escapeHtml(c.empresa)}</strong>
+        <span>${escapeHtml(c.nome)} · ${escapeHtml(formatDate(c.acompanhamento))}</span>
+      </div>
+      <div class="followup-alert-actions">
+        <button type="button" class="btn-primary followup-view-btn">Ver contato</button>
+        <button type="button" class="btn-secondary followup-ignore-btn">Deixar passar</button>
+      </div>
+    `;
+    li.querySelector(".followup-view-btn").addEventListener("click", async () => {
+      await dismissFollowup(c);
+      followupAlertModal.classList.add("hidden");
+      openModal(c);
+    });
+    li.querySelector(".followup-ignore-btn").addEventListener("click", async () => {
+      await dismissFollowup(c);
+      li.remove();
+      if (!followupAlertList.children.length) {
+        followupAlertModal.classList.add("hidden");
+      }
+    });
+    followupAlertList.appendChild(li);
+  }
+  followupAlertModal.classList.remove("hidden");
+}
+
+async function dismissFollowup(contact) {
+  await updateDoc(doc(db, CONTACTS_COLLECTION, contact.id), {
+    acompanhamentoDismissedDate: contact.acompanhamento,
+  });
+}
+
+followupAlertCloseBtn.addEventListener("click", () => {
+  followupAlertModal.classList.add("hidden");
+});
+followupAlertModal.addEventListener("click", (e) => {
+  if (e.target === followupAlertModal) followupAlertModal.classList.add("hidden");
 });

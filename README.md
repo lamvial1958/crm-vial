@@ -1,6 +1,6 @@
 # CRM Vial
 
-CRM básico para acompanhar envios e respostas de contatos comerciais. Campos: Empresa, Setor, Nome do Contato, Cargo, E-mail, Data do Envio, Status (Sem resposta / Interessado / Recusado) e Próximo Passo.
+CRM básico para acompanhar envios e respostas de contatos comerciais. Campos: Empresa, Setor, Nome do Contato, Cargo, E-mail, Data do Envio, Status (Sem resposta / Interessado / Recusado), Próximo Passo e Acompanhamento (data do próximo contato com a empresa).
 
 É um site estático (HTML/CSS/JS puro, sem build) que usa **Firebase** como banco de dados, então funciona igual no computador e no celular, sempre sincronizado, e não depende do navegador para guardar os dados.
 
@@ -53,6 +53,7 @@ Depois abra a URL indicada no navegador e clique em "Entrar com Google" (em `loc
 - **Excluir**: abra o contato e clique em "Excluir".
 - **Buscar/filtrar**: campo de busca (empresa, contato, setor) e filtro por status no topo.
 - **Sair**: botão "Sair" no canto superior direito (some o acesso até logar novamente).
+- **Acompanhamento**: ao abrir o app, se algum contato tiver uma data de acompanhamento vencida (hoje ou antes) que ainda não foi tratada, aparece um aviso com a lista desses contatos. Para cada um você escolhe "Ver contato" (abre para editar) ou "Deixar passar" (dispensa o aviso); se a data for alterada depois, o aviso pode voltar a aparecer.
 
 ## Estrutura dos arquivos
 
