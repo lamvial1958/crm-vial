@@ -47,13 +47,6 @@ body {
   font-size: 14px;
 }
 
-.login-card input {
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
 .error-msg {
   color: #dc2626;
   font-size: 13px;
@@ -87,8 +80,46 @@ body {
 
 main {
   padding: 24px;
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
+}
+
+/* #11 Dashboard */
+.dashboard {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.dash-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  min-width: 110px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
+  border-top: 3px solid #e5e7eb;
+}
+
+.dash-interessado { border-top-color: #10b981; }
+.dash-sem-resposta { border-top-color: #f59e0b; }
+.dash-vencidos     { border-top-color: #ef4444; }
+
+.dash-number {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1f2430;
+}
+
+.dash-label {
+  font-size: 12px;
+  color: #6b7280;
+  text-align: center;
 }
 
 /* Toolbar */
@@ -96,7 +127,7 @@ main {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
 .toolbar input,
@@ -110,6 +141,13 @@ main {
 #search-input {
   flex: 1;
   min-width: 200px;
+}
+
+/* #8 Contador de resultados */
+.results-counter {
+  font-size: 12px;
+  color: #9ca3af;
+  margin: 0 0 10px;
 }
 
 /* Buttons */
@@ -160,7 +198,7 @@ button {
 table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 900px;
+  min-width: 1000px;
 }
 
 th, td {
@@ -169,7 +207,7 @@ th, td {
   border-bottom: 1px solid #eef0f3;
   font-size: 14px;
   white-space: nowrap;
-  max-width: 220px;
+  max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -180,11 +218,55 @@ th {
   text-transform: uppercase;
   color: #6b7280;
   letter-spacing: 0.03em;
+  user-select: none;
+}
+
+/* #4 Ordenação */
+th[data-sort] {
+  cursor: pointer;
+}
+
+th[data-sort]:hover {
+  background: #f1f3f5;
+}
+
+th.sort-active {
+  color: #2563eb;
+}
+
+.sort-icon {
+  font-size: 10px;
+  opacity: 0.6;
+  margin-left: 2px;
 }
 
 tbody tr:hover {
   background: #f9fafb;
   cursor: pointer;
+}
+
+/* #1 Linha de follow-up vencido */
+tbody tr.row-overdue {
+  background: #fff7ed;
+}
+
+tbody tr.row-overdue:hover {
+  background: #ffedd5;
+}
+
+.overdue-dot {
+  color: #f97316;
+  font-size: 13px;
+}
+
+/* #2 Links clicáveis na tabela */
+.table-link {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.table-link:hover {
+  text-decoration: underline;
 }
 
 .empty-msg {
@@ -193,12 +275,14 @@ tbody tr:hover {
   color: #9ca3af;
 }
 
+/* Status badges */
 .status-badge {
   display: inline-block;
   padding: 3px 10px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .status-sem-resposta {
@@ -214,6 +298,22 @@ tbody tr:hover {
 .status-recusado {
   background: #fee2e2;
   color: #991b1b;
+}
+
+/* #6 Novos status */
+.status-proposta {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.status-negociacao {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+.status-espera {
+  background: #f1f5f9;
+  color: #475569;
 }
 
 /* Modal */
@@ -233,12 +333,23 @@ tbody tr:hover {
   border-radius: 12px;
   padding: 24px;
   width: 100%;
-  max-width: 480px;
+  max-width: 580px;
   max-height: 90vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+/* #10 Modal de confirmação menor */
+.modal-card-sm {
+  max-width: 380px;
+}
+
+.delete-confirm-msg {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
 }
 
 .modal-card h2 {
@@ -265,6 +376,13 @@ tbody tr:hover {
   font-family: inherit;
 }
 
+/* Form em 2 colunas para o modal */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
 .modal-actions {
   display: flex;
   justify-content: space-between;
@@ -275,6 +393,79 @@ tbody tr:hover {
 .modal-actions-right {
   display: flex;
   gap: 8px;
+}
+
+/* #13 Histórico de interações */
+.historico-section {
+  border-top: 1px solid #eef0f3;
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.historico-title {
+  margin: 0;
+  font-size: 14px;
+  color: #374151;
+}
+
+.historico-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.historico-entry {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13px;
+  padding: 6px 10px;
+  background: #f9fafb;
+  border-radius: 6px;
+}
+
+.historico-date {
+  color: #9ca3af;
+  white-space: nowrap;
+  font-size: 12px;
+  padding-top: 1px;
+  min-width: 70px;
+}
+
+.historico-texto {
+  color: #374151;
+  line-height: 1.4;
+}
+
+.historico-empty {
+  margin: 0;
+  font-size: 13px;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.historico-add {
+  display: flex;
+  gap: 8px;
+}
+
+.historico-add input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.historico-add button {
+  padding: 8px 14px;
+  font-size: 13px;
+  white-space: nowrap;
 }
 
 /* Aviso de acompanhamentos vencidos */
@@ -328,11 +519,63 @@ tbody tr:hover {
   font-size: 13px;
 }
 
+/* #5 Toast */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 100;
+}
+
+.toast {
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.25s, transform 0.25s;
+  max-width: 320px;
+}
+
+.toast.toast-show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast-success {
+  background: #1f2430;
+  color: #fff;
+}
+
+.toast-error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
 @media (max-width: 640px) {
   .topbar {
     padding: 12px 16px;
   }
+
   main {
     padding: 16px;
+  }
+
+  .dashboard {
+    gap: 8px;
+  }
+
+  .dash-card {
+    min-width: 80px;
+    padding: 12px 10px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
   }
 }

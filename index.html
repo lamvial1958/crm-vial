@@ -29,35 +29,69 @@
     </header>
 
     <main>
+      <!-- #11 Dashboard -->
+      <div class="dashboard">
+        <div class="dash-card">
+          <span class="dash-number" id="dash-total">0</span>
+          <span class="dash-label">Total</span>
+        </div>
+        <div class="dash-card dash-interessado">
+          <span class="dash-number" id="dash-interessado">0</span>
+          <span class="dash-label">Interessados</span>
+        </div>
+        <div class="dash-card dash-sem-resposta">
+          <span class="dash-number" id="dash-sem-resposta">0</span>
+          <span class="dash-label">Sem resposta</span>
+        </div>
+        <div class="dash-card dash-vencidos">
+          <span class="dash-number" id="dash-vencidos">0</span>
+          <span class="dash-label">Follow-ups vencidos</span>
+        </div>
+      </div>
+
       <div class="toolbar">
         <input type="text" id="search-input" placeholder="Buscar por empresa, contato, setor..." />
+        <!-- #6 Mais status no filtro -->
         <select id="status-filter">
           <option value="">Todos os status</option>
           <option value="Sem resposta">Sem resposta</option>
           <option value="Interessado">Interessado</option>
+          <option value="Proposta enviada">Proposta enviada</option>
+          <option value="Em negociação">Em negociação</option>
+          <option value="Em espera">Em espera</option>
           <option value="Recusado">Recusado</option>
         </select>
+        <!-- #7 Filtro por setor -->
+        <select id="setor-filter">
+          <option value="">Todos os setores</option>
+        </select>
+        <!-- #9 Exportar CSV -->
+        <button id="export-csv-btn" class="btn-secondary">Exportar CSV</button>
         <button id="new-contact-btn" class="btn-primary">+ Novo contato</button>
       </div>
+
+      <!-- #8 Contador de resultados -->
+      <p id="results-counter" class="results-counter"></p>
 
       <div class="table-wrapper">
         <table id="contacts-table">
           <thead>
             <tr>
-              <th>Empresa</th>
-              <th>Setor</th>
-              <th>Nome do Contato</th>
+              <!-- #4 Colunas ordenáveis -->
+              <th data-sort="empresa">Empresa <span class="sort-icon">↕</span></th>
+              <th data-sort="setor">Setor <span class="sort-icon">↕</span></th>
+              <th data-sort="nome">Nome do Contato <span class="sort-icon">↕</span></th>
               <th>Cargo</th>
               <th>E-mail</th>
-              <th>Data do Envio</th>
-              <th>Status</th>
+              <!-- #3 Coluna telefone -->
+              <th>Telefone</th>
+              <th data-sort="data">Data do Envio <span class="sort-icon">↕</span></th>
+              <th data-sort="status">Status <span class="sort-icon">↕</span></th>
               <th>Próximo Passo</th>
-              <th>Acompanhamento</th>
-              <th></th>
+              <th data-sort="acompanhamento">Acompanhamento <span class="sort-icon">↕</span></th>
             </tr>
           </thead>
-          <tbody id="contacts-tbody">
-          </tbody>
+          <tbody id="contacts-tbody"></tbody>
         </table>
         <p id="empty-msg" class="empty-msg hidden">Nenhum contato cadastrado ainda.</p>
       </div>
@@ -70,37 +104,67 @@
       <h2 id="modal-title">Novo contato</h2>
       <input type="hidden" id="contact-id" />
 
-      <label>Empresa
-        <input type="text" id="field-empresa" required />
-      </label>
-      <label>Setor
-        <input type="text" id="field-setor" />
-      </label>
-      <label>Nome do Contato
-        <input type="text" id="field-nome" required />
-      </label>
-      <label>Cargo
-        <input type="text" id="field-cargo" />
-      </label>
-      <label>E-mail
-        <input type="email" id="field-email" />
-      </label>
-      <label>Data do Envio
-        <input type="date" id="field-data" />
-      </label>
-      <label>Status
-        <select id="field-status">
-          <option value="Sem resposta">Sem resposta</option>
-          <option value="Interessado">Interessado</option>
-          <option value="Recusado">Recusado</option>
-        </select>
-      </label>
+      <div class="form-grid">
+        <label>Empresa
+          <input type="text" id="field-empresa" required />
+        </label>
+        <label>Setor
+          <input type="text" id="field-setor" />
+        </label>
+        <label>Nome do Contato
+          <input type="text" id="field-nome" required />
+        </label>
+        <label>Cargo
+          <input type="text" id="field-cargo" />
+        </label>
+        <label>E-mail
+          <input type="email" id="field-email" />
+        </label>
+        <!-- #3 Campo telefone -->
+        <label>Telefone
+          <input type="tel" id="field-telefone" placeholder="+55 11 99999-9999" />
+        </label>
+        <!-- #12 LinkedIn / Site -->
+        <label>LinkedIn / Site
+          <input type="url" id="field-linkedin" placeholder="https://..." />
+        </label>
+        <label>Data do Envio
+          <input type="date" id="field-data" />
+        </label>
+        <!-- #6 Mais opções de status -->
+        <label>Status
+          <select id="field-status">
+            <option value="Sem resposta">Sem resposta</option>
+            <option value="Interessado">Interessado</option>
+            <option value="Proposta enviada">Proposta enviada</option>
+            <option value="Em negociação">Em negociação</option>
+            <option value="Em espera">Em espera</option>
+            <option value="Recusado">Recusado</option>
+          </select>
+        </label>
+        <label>Acompanhamento
+          <input type="date" id="field-acompanhamento" />
+        </label>
+      </div>
+
       <label>Próximo Passo
         <textarea id="field-proximo-passo" rows="2"></textarea>
       </label>
-      <label>Acompanhamento
-        <input type="date" id="field-acompanhamento" />
+
+      <!-- #14 Notas livres -->
+      <label>Notas
+        <textarea id="field-notas" rows="2" placeholder="Observações livres..."></textarea>
       </label>
+
+      <!-- #13 Histórico de interações -->
+      <div class="historico-section">
+        <h3 class="historico-title">Histórico de interações</h3>
+        <div id="historico-list" class="historico-list"></div>
+        <div class="historico-add">
+          <input type="text" id="historico-input" placeholder="Registrar nova interação..." />
+          <button type="button" id="historico-add-btn" class="btn-secondary">Adicionar</button>
+        </div>
+      </div>
 
       <div class="modal-actions">
         <button type="button" id="delete-contact-btn" class="btn-danger hidden">Excluir</button>
@@ -110,6 +174,20 @@
         </div>
       </div>
     </form>
+  </div>
+
+  <!-- #10 Modal de confirmação de exclusão -->
+  <div id="delete-confirm-modal" class="modal-overlay hidden">
+    <div class="modal-card modal-card-sm">
+      <h2>Excluir contato?</h2>
+      <p class="delete-confirm-msg">Esta ação não pode ser desfeita.</p>
+      <div class="modal-actions">
+        <div class="modal-actions-right">
+          <button type="button" id="delete-cancel-btn" class="btn-secondary">Cancelar</button>
+          <button type="button" id="delete-confirm-btn" class="btn-danger">Excluir</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Modal de aviso de acompanhamentos vencidos -->
@@ -125,6 +203,9 @@
       </div>
     </div>
   </div>
+
+  <!-- #5 Toast de notificação -->
+  <div id="toast-container" class="toast-container"></div>
 
   <script type="module" src="firebase-config.js"></script>
   <script type="module" src="app.js"></script>
